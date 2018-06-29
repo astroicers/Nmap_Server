@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="static/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/lib/style.css" rel="stylesheet">
+    <title></title>
+    <script type="text/javascript">
+    </script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a>
+                <span class="navbar-brand mb-0 h1">忠順</span>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">目標總覽</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                            任務
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="nmap">掃描</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">攻擊</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">漏洞項目</a>
+                    </li>
+                </ul>
+                <a>登出</a>
+            </div>
+        </nav>
+    </header>
+    <div class="row">
+        <div class="col-4">
+            <form action="add_task" method="POST">
+                <input class="form-control mr-sm-1 mb-sm-1" type="text" placeholder="Host" aria-label="text" name="search_host" style="width:40%">
+                <input class="form-control mr-sm-1 mb-sm-1" type="text" placeholder="Port" aria-label="text" name="search_port" style="width:40%">
+                <input class="form-control mr-sm-1 mb-sm-1" type="text" placeholder="Threads" aria-label="text" name="search_threads" style="width:40%">
+                
+                <h2>掃描模式</h2>
+                <!--
+                    -sT: (TCP Connect Scan)
+                    -sS: (SYN Stealth Scan)
+                    -sA: (ACK Scan)
+                    -sM: (Mainmon Scan)
+                    -sF: (FIN Scan)
+                    -sN: (NULL Scan)
+                    -sX: (Xmas Tree Scan)
+                    -sU: (UDP Scan)
+                    -sO: (IP Protocol Scan)
+                    -sP: (Ping Sweep)
+                -->
+                {% for x in scan_mode_list %}
+                <div class="form-check">
+                    <label>
+                        <input type="radio" name="scan_mode_list" value="{{x.arg}}">
+                        <span class="label-text">{{ x.name }}</span>
+                        <p>{{x.text}}</p>
+                    </label>
+                </div>
+                {% endfor %}
+                <h2>Ping相關選項</h2>
+                <!--
+                    -P0: (Don't Ping)
+                    -PI: (ICMP Echo)
+                    -PE: (Use ICMP Ping Host)
+                    -PR: (ARP Ping)
+                    -PS: (TCP SYN Ping)
+                    -PA: (TCP ACK Ping)
+                    -PU: (UDP Ping)
+                -->
+                {% for x in ping_list %}
+                <div class="form-check">
+                    <label>
+                        <input type="radio" name="ping_list" value="{{x.arg}}">
+                        <span class="label-text">{{ x.name }}</span>
+                        <p>{{x.text}}</p>
+                    </label>
+                </div>
+                {% endfor %}
+                <h2>設定掃描速度</h2>
+                <!--
+                    -T0: (Paranoid)
+                    -T1: (Sneaky) 
+                    -T2: (Polite) 
+                    -T3: (Normal) 
+                    -T4: (Aggressive) 
+                    -T5: (Insane) 
+                -->
+                {% for x in speed_list %}
+                <div class="form-check">
+                    <label>
+                        <input type="radio" name="speed_list" value="{{x.arg}}">
+                        <span class="label-text">{{ x.name }}</span>
+                        <p>{{x.text}}</p>
+                    </label>
+                </div>
+                {% endfor %}
+                <h2>其他常用選項</h2>
+                <!--
+                    -f: (Fragmentation)
+                    -6: (IPv6)
+                -->
+                {% for x in other_list %}
+                <div class="form-check">
+                    <label>
+                        <input type="checkbox" name="other_list{{x.arg}}" value="{{x.arg}}">
+                        <span class="label-text">{{ x.name }}</span>
+                        <p>{{x.text}}</p>
+                    </label>
+                </div>
+                {% endfor %}
+                <button class="btn btn-outline-success my-2 my-sm-0 mb-sm-1" type="submit">送出</button>
+                <input class="btn btn-outline-success my-2 my-sm-0 mb-sm-1" type="reset">
+            </form>
+        </div>
+        <div class="col-8">
+            <div class="tab-content" id="nav-tabContent" style="height:820px;overflow:auto;">
+                <!--...-->
+            </div>
+        </div>
+    </div>
+    <script src="static/js/lib/jquery.min.js"></script>
+    <script src="static/js/lib/bootstrap.min.js"></script>
+    <script src="static/js/lib/popper.min.js"></script>
+</body>
+<footer>
+</footer>
+
+</html>

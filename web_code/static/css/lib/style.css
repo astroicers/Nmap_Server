@@ -1,0 +1,44 @@
+#login_bg {
+	background-color: rgba(0, 0, 0, 0.3);
+	height: 320px;
+}
+.use_flexbox{
+	position: absolute;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	height: 100%;
+	width: 100%;
+	border:1px solid #000;
+}
+.account-pages
+{ 	
+  background: url("../img/bg.jpg") center;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+}
+.login_text {
+  font-size: 42px;
+  float: none;
+  color: #FFFFFF !important;  
+}
+.content_test {
+	font-size: 24px;
+}
+a {
+	font-family:Microsoft JhengHei;
+}
+
+h1 {
+	font-family:Microsoft JhengHei;
+}
+
+/**水平分隔線樣式**/
+hr.style-one {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
