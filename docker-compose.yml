@@ -1,0 +1,38 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    container_name: mongo_gui
+    image: mongo-express
+    restart: always
+    ports:
+      - '8081:8081'
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+
+  namp_server:
+    container_name: namp_server
+    image: astroicers/nmap_server
+    restart: always
+    #volumes:
+    #  - /path/to/share/:/shared
+    ports:
+      - '139:139'
+      - '445:445'
+      - '137:137/udp'
+      - '138:138/udp'
+      - '5200:5200'
+    network_mode: "host"
