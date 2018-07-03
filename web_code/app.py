@@ -38,12 +38,12 @@ mon = MongoClient('mongodb://' + 'root' + ':' + 'example' + '@127.0.0.1')
 @app.route("/add_task", methods=['GET', 'POST'])
 def scan():
     # alpine mode
-    # command = [
-    #    'python2.7', '/scan_code/muti_nmap_mongo.py']
+     command = [
+        'python2.7', '/scan_code/muti_nmap_mongo.py']
 
     # debug mode
-    command = [
-        'python2.7', '/home/astroicers/Nmap_Server/scan_code/muti_nmap_mongo.py']
+    #command = [
+    #    'python2.7', '/home/astroicers/Nmap_Server/scan_code/muti_nmap_mongo.py']
     if request.method == 'POST':
         search_host = request.form.get('search_host')
         search_port = request.form.get('search_port')
