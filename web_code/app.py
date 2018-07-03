@@ -38,7 +38,7 @@ mon = MongoClient('mongodb://' + 'root' + ':' + 'example' + '@127.0.0.1')
 @app.route("/add_task", methods=['GET', 'POST'])
 def scan():
     # alpine mode
-     command = [
+    command = [
         'python2.7', '/scan_code/muti_nmap_mongo.py']
 
     # debug mode
