@@ -46,7 +46,7 @@
                 <input class="form-control mr-sm-1 mb-sm-1" type="text" placeholder="Host" aria-label="text" name="search_host" style="width:40%">
                 <input class="form-control mr-sm-1 mb-sm-1" type="text" placeholder="Port" aria-label="text" name="search_port" style="width:40%">
                 <input class="form-control mr-sm-1 mb-sm-1" type="text" placeholder="Threads" aria-label="text" name="search_threads" style="width:40%">
-                
+
                 <h2>掃描模式</h2>
                 <!--
                     -sT: (TCP Connect Scan)
@@ -126,7 +126,30 @@
         </div>
         <div class="col-8">
             <div class="tab-content" id="nav-tabContent" style="height:820px;overflow:auto;">
-                <!--...-->
+                <table class='table table-bordered'>
+                    <thead class='thead-light'>
+                        <tr>
+                            <th scope='col'>IP(s)</th>
+                            <th scope='col'>掃描狀態</th>
+                            <th scope='col'>port(s)</th>
+                            <th scope='col'>Nmap參數</th>
+                            <th scope='col'>執行緒數</th>
+                            <th scope='col'>掃描開始時間</th>
+                            <th scope='col'>掃描結束時間</th>
+                        </tr>
+                        {%for task in task_list%}
+                        <tr>
+                            <td>{{task.target}}</td>
+                            <td>{{task.status}}</td>
+                            <td>{{task.port}}</td>
+                            <td>{{task.arg}}</td>
+                            <td>{{task.thread}}</td>
+                            <td>{{task.start_time_man}}</td>
+                            <td>{{task.end_time_man}}</td>
+                        </tr>
+                        {%endfor%}
+                    </thead>
+                </table>
             </div>
         </div>
     </div>

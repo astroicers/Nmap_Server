@@ -37,9 +37,13 @@ mon = MongoClient('mongodb://' + 'root' + ':' + 'example' + '@127.0.0.1')
 
 @app.route("/add_task", methods=['GET', 'POST'])
 def scan():
-    command = [
-        'python2.7', '/scan_code/muti_nmap_mongo.py']
+    # alpine mode
+    # command = [
+    #    'python2.7', '/scan_code/muti_nmap_mongo.py']
 
+    # debug mode
+    command = [
+        'python2.7', '/home/astroicers/Nmap_Server/scan_code/muti_nmap_mongo.py']
     if request.method == 'POST':
         search_host = request.form.get('search_host')
         search_port = request.form.get('search_port')
@@ -50,21 +54,33 @@ def scan():
         speed_list = request.form.get('speed_list')
         other_listf = request.form.get('other_list-f')
         other_list6 = request.form.get('other_list-6')
-    command.append('-i')
-    command.append(search_host)
-    command.append('-p')
-    command.append(search_port)
-    command.append('-t')
-    command.append(search_threads)
-    command.append('-a')
-    temp2 = [scan_mode_list, ping_list, speed_list, other_listf, other_list6]
-    temp = ''
-    for x in temp2:
-        if x != None:
-            temp += x+' '
-    command.append(temp)
-    process = subprocess.Popen(command, stderr=subprocess.PIPE)
-    return render_template('add_scan.html', command=command)
+    if search_host != '':
+        command.append('-i')
+        command.append(search_host)
+    if search_host != '':
+        command.append('-p')
+        command.append(search_port)
+    if search_host != '':
+        command.append('-t')
+        command.append(search_threads)
+    if search_host != '':
+        command.append('-a')
+        temp2 = [scan_mode_list, ping_list,
+                 speed_list, other_listf, other_list6]
+        temp = ''
+        for x in temp2:
+            if x != None:
+                temp += x+' '
+        #temp = "\'" + temp + "\'"
+        command.append(temp)
+    show_text = ''
+    for x in command:
+        show_text += x + ' '
+    try:
+        process = subprocess.Popen(command, stderr=subprocess.PIPE)
+    except:
+        show_text = 'Error in subprocess'
+    return render_template('add_scan.html', command=command, show_text=show_text)
 
 
 @app.route("/nmap", methods=['GET', 'POST'])
@@ -83,7 +99,7 @@ def nmap_gui():
             'arg': '-P0',
             'name': 'Don\'t Ping',
             'text': u'執行掃描前，不目標主機。'
-        }
+        },
     ]
     speed_list = [
         {
@@ -91,7 +107,7 @@ def nmap_gui():
             'arg': '-T0',
             'name': 'Paranoid',
             'text': u'每五秒鐘發送一個封包。'
-        }
+        },
     ]
     other_list = [
         {
@@ -104,10 +120,11 @@ def nmap_gui():
             'id': '2',
             'arg': '-6',
             'name': 'IPv6',
-            'text': u'支援掃描IPv6。'
-        }
+            'text': u'支援掃描IPv6TAT。'
+        },
     ]
-    return render_template('nmap_gui.html', scan_mode_list=scan_mode_list, ping_list=ping_list, speed_list=speed_list, other_list=other_list)
+    task_list = mon.toybox.task_list.find()
+    return render_template('nmap_gui.html', scan_mode_list=scan_mode_list, ping_list=ping_list, speed_list=speed_list, other_list=other_list, task_list=task_list)
 
 
 @app.route("/", methods=['GET', 'POST'])

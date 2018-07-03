@@ -9,6 +9,29 @@ from argparse import ArgumentParser
 import sys
 
 
+def add_task(i, p, a, t):
+    global time_flag
+    data = {}
+    data['target'] = str(i)
+    data['port'] = str(p)
+    data['arg'] = str(a)
+    data['thread'] = str(t)
+    data['status'] = 'Scanning'
+    data['start_time_pc'] = str(time.time())
+    time_flag = data['start_time_pc']
+    data['start_time_man'] = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime())
+    mon.toybox.task_list.insert_one(data)
+
+
+def finish_task():
+    data = {}
+    data['end_time_pc'] = str(time.time())
+    data['end_time_man'] = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    data['status'] = 'Finished'
+    mon.toybox.task_list.update({'start_time_pc': time_flag}, {'$set': data})
+
+
 def py_nse(target, nse_name):
     target = target
     port = nse[nse_name]['port']
@@ -199,11 +222,12 @@ if __name__ == "__main__":
     print '#######################[Initialization Data]#######################'
     scanned = 0
     exitFlag = 0
-    
+    time_flag = 0
+
     mongo_admin = 'root'
     mongo_pass = 'example'
     database = 'toybox'
-    collection = ['ip_list', 'nse_list']
+    collection = ['ip_list', 'nse_list', 'task_list']
 
     target_list = []
     port = '1-1000,1433,3306,3389,4786,8080-8100'
@@ -248,12 +272,29 @@ if __name__ == "__main__":
         parser.print_help()
         sys.exit()
 
+    print '#######################[Connect MongoDB]#######################'
+    try:
+        mon = MongoClient('mongodb://'+mongo_admin +
+                          ':' + mongo_pass + '@127.0.0.1')
+    except:
+        print 'Error: Connect mongodb fail.'
+        sys.exit()
+    for x in range(3):
+        try:
+
+            mon[database][collection[x]].insert_one({"_id": 'Ke_Sean_Toy'})
+            mon[database][collection[x]].remove({"_id": 'Ke_Sean_Toy'})
+            print 'Create database : %s' % database
+            print 'Create collection : %s' % collection[x]
+        except:
+            pass
+
     print '#######################[Get Argument]#######################'
     for a, b in enumerate(sys.argv):
         try:
             if b == '-t' or b == '--threads':
                 if sys.argv[a+1] >= 1 and sys.argv[a+1] <= 64:
-                    threads = sys.argv[a+1]
+                    threads = int(sys.argv[a+1])
         except:
             print 'Error: Threads'
             parser.print_help()
@@ -269,26 +310,34 @@ if __name__ == "__main__":
             print 'Error: Nmap argument'
             parser.print_help()
             sys.exit()
-    print 'Nmap argument :%s'% Narg
+    print 'Nmap argument :%s' % Narg
 
     for a, b in enumerate(sys.argv):
         try:
             if b == '-p' or b == '--port':
                 port = sys.argv[a+1]
+                if port == '':
+                    1/0
         except:
             print 'Error: Port'
             parser.print_help()
             sys.exit()
-    print 'Port :%s'% port
+    print 'Port :%s' % port
 
     for a, b in enumerate(sys.argv):
         try:
             if b == '-l' or b == '--list':
                 file_path = sys.argv[a+1]
-                print 'File_path : %s' % file_path
+                if file_path != '':
+                    print 'File_path : %s' % file_path
+                else:
+                    1/0
             elif b == '-i' or b == '--ip':
                 ip_arg = sys.argv[a+1]
-                print 'ip : %s' % ip_arg
+                if ip_arg != '':
+                    print 'ip : %s' % ip_arg
+                else:
+                    1/0
         except:
             print 'Error: list or ip'
             parser.print_help()
@@ -330,30 +379,8 @@ if __name__ == "__main__":
     else:
         parser.print_help()
         sys.exit()
-
-    print '#######################[Connect MongoDB]#######################'
-    try:
-        mon = MongoClient('mongodb://'+mongo_admin +
-                          ':' + mongo_pass + '@127.0.0.1')
-    except:
-        print 'Error: Connect mongodb fail.'
-        sys.exit()
-    try:
-
-        mon[database][collection[0]].insert_one({"_id": 'Ke_Sean_Toy'})
-        mon[database][collection[0]].remove({"_id": 'Ke_Sean_Toy'})
-        print 'Create database : %s' % database
-        print 'Create collection : %s' % collection[0]
-    except:
-        pass
-    try:
-
-        mon[database][collection[1]].insert_one({"_id": 'Ke_Sean_Toy'})
-        mon[database][collection[1]].remove({"_id": 'Ke_Sean_Toy'})
-        print 'Create database : %s' % database
-        print 'Create collection : %s' % collection[1]
-    except:
-        pass
+    print '#######################[Add Task]#######################'
+    add_task(target_list, port, Narg, threads)
     print '#######################[Scanning...]#######################'
     threadList = []
     for i in range(0, threads):
@@ -385,4 +412,6 @@ if __name__ == "__main__":
     # Wait all thread finished
     for t in threads:
         t.join()
+    print '#######################[Finish Task]#######################'
+    finish_task()
     print '#######################[Finish]#######################'
