@@ -14,7 +14,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a>
-                <span class="navbar-brand mb-0 h1">忠順 {{search_filter}}</span>
+                <span class="navbar-brand mb-0 h1">忠順</span>
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
@@ -44,7 +44,7 @@
         <div class="col-4">
             <!-- search bar n button-->
             <form class="form-inline" name="test" action="" method="Post">
-                <input class="form-control mr-sm-1 mb-sm-1" type="search" placeholder="Search" aria-label="Search" name="search_filter" style="width:80%">
+                <input class="form-control mr-sm-1 mb-sm-1" type="search" placeholder="Search" aria-label="Search" name="search_filter" value="{{search_filter}}" style="width:80%">
                 <button class="btn btn-outline-success my-2 my-sm-0 mb-sm-1" type="submit">搜尋</button>
             </form>
             <div class="list-group" id="list-tab" role="tablist" style="height:820px;overflow:auto;">

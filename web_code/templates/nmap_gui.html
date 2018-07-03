@@ -63,7 +63,7 @@
                 {% for x in scan_mode_list %}
                 <div class="form-check">
                     <label>
-                        <input type="radio" name="scan_mode_list" value="{{x.arg}}">
+                        <input checked type="radio" name="scan_mode_list" value="{{x.arg}}">
                         <span class="label-text">{{ x.name }}</span>
                         <p>{{x.text}}</p>
                     </label>
