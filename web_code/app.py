@@ -42,7 +42,7 @@ def scan():
         'python2.7', '/scan_code/muti_nmap_mongo.py']
 
     # debug mode
-    #command = [
+    # command = [
     #    'python2.7', '/home/astroicers/Nmap_Server/scan_code/muti_nmap_mongo.py']
     if request.method == 'POST':
         search_host = request.form.get('search_host')
@@ -57,10 +57,10 @@ def scan():
     if search_host != '':
         command.append('-i')
         command.append(search_host)
-    if search_host != '':
+    if search_port != '':
         command.append('-p')
         command.append(search_port)
-    if search_host != '':
+    if search_threads != '':
         command.append('-t')
         command.append(search_threads)
     if search_host != '':

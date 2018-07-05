@@ -1,19 +1,10 @@
 <!DOCTYPE html>
 <html>
-<script>
-    function myrefresh() {
-        window.location.reload();
-    }
-    setTimeout('myrefresh()', 5000);
-</script>
-
 <head>
     <meta charset="utf-8">
     <link href="static/css/lib/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/lib/style.css" rel="stylesheet">
     <title></title>
-    <script type="text/javascript">
-    </script>
 </head>
 
 <body>
@@ -132,6 +123,7 @@
         </div>
         <div class="col-8">
             <div class="tab-content" id="nav-tabContent" style="height:820px;overflow:auto;">
+                <div class="refresh">
                 <table class='table table-bordered'>
                     <thead class='thead-light'>
                         <tr>
@@ -156,12 +148,18 @@
                         {%endfor%}
                     </thead>
                 </table>
+                </div>
             </div>
         </div>
     </div>
     <script src="static/js/lib/jquery.min.js"></script>
     <script src="static/js/lib/bootstrap.min.js"></script>
     <script src="static/js/lib/popper.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            setInterval(function () { $(".refresh").load(location.href + " .refresh"); }, 5000);
+        })
+    </script>
 </body>
 <footer>
 </footer>
