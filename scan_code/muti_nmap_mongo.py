@@ -12,7 +12,10 @@ import sys
 def add_task(i, p, a, t):
     global time_flag
     data = {}
-    data['target'] = str(i)
+    temp = ''
+    for x in i:
+        temp += str(x)+','
+    data['target'] = temp.rstrip(',')
     data['port'] = str(p)
     data['arg'] = str(a)
     data['thread'] = str(t)
