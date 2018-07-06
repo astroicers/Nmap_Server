@@ -85,6 +85,7 @@ def scan():
 
 @app.route("/nmap", methods=['GET', 'POST'])
 def nmap_gui():
+
     scan_mode_list = [
         {
             'id': '1',
@@ -92,6 +93,61 @@ def nmap_gui():
             'name': 'TCP Connect Scan',
             'text': u'利用TCP協定，建立完整的3向交握連線後在進行掃描，雖然準確率比較高，但易留下紀錄。'
         },
+        {
+            'id': '2',
+            'arg': '-sS',
+            'name': 'SYN Stealth Scan',
+            'text': u'半開放掃描，若對方有開啟TCP端口就會回應封包，不會留下紀錄。'
+        },
+        {
+            'id': '3',
+            'arg': '-sA',
+            'name': 'ACK Scan ',
+            'text': u'探測目標是否有防火牆阻擋。'
+        },
+        {
+            'id': '4',
+            'arg': '-sM',
+            'name': 'Mainmon Scan',
+            'text': u'判斷那些端口是開啟狀態。'
+        },
+        {
+            'id': '5',
+            'arg': '-sF',
+            'name': 'FIN Scan',
+            'text': u'正常連線型態，隱密性較高。'
+        },
+        {
+            'id': '6',
+            'arg': '-sN',
+            'name': 'NULL Scan',
+            'text': u'類似-sF，但對Windows無作用。'
+        },
+        {
+            'id': '7',
+            'arg': '-sX',
+            'name': 'XMas Tree Scan',
+            'text': u'利用送出三個控制封包探測目標主機，對Windows無作用。'
+        },
+        {
+            'id': '8',
+            'arg': '-sU',
+            'name': 'UDP Scan',
+            'text': u'探測目標是否提供UDP服務。'
+        },
+        {
+            'id': '9',
+            'arg': '-sO',
+            'name': 'IP Protocol Scan',
+            'text': u'偵測目標系統哪些IP協定。'
+        },
+        {
+            'id': '10',
+            'arg': '-sP',
+            'name': 'Ping Sweep',
+            'text': u'單純Ping掃描。'
+        }
+
     ]
     ping_list = [
         {
@@ -100,6 +156,42 @@ def nmap_gui():
             'name': 'Don\'t Ping',
             'text': u'執行掃描前，不目標主機。'
         },
+        {
+            'id': '2',
+            'arg': '-PI',
+            'name': 'ICMP Echo',
+            'text': u'查詢目標是否正在運行。'
+        },
+        {
+            'id': '3',
+            'arg': '-PE',
+            'name': 'Use ICMP Ping Host',
+            'text': u'利用ICMP封包Ping目標。'
+        },
+        {
+            'id': '4',
+            'arg': '-PR',
+            'name': 'ARP Ping',
+            'text': u'只能使用同區段的區域網路。'
+        },
+        {
+            'id': '5',
+            'arg': '-PS',
+            'name': 'TCP SYN Ping',
+            'text': u'發出TCP SYN封包，需指定端口，預設端口80。'
+        },
+        {
+            'id': '6',
+            'arg': '-PA',
+            'name': 'TCP ACK Ping',
+            'text': u'發出TCP ACK封包，需指定端口，預設端口80。'
+        },
+        {
+            'id': '7',
+            'arg': '-PU',
+            'name': 'UDP Ping',
+            'text': u'發出空的UDP封包，需指定端口，預設端口31338。'
+        }
     ]
     speed_list = [
         {
@@ -108,6 +200,36 @@ def nmap_gui():
             'name': 'Paranoid',
             'text': u'每五秒鐘發送一個封包。'
         },
+        {
+            'id': '2',
+            'arg': '-T1',
+            'name': 'Sneaky',
+            'text': u'每十五秒鐘發送一個封包。'
+        },
+        {
+            'id': '3',
+            'arg': '-T2',
+            'name': 'Polite',
+            'text': u'每0.4秒鐘發送一個封包。'
+        },
+        {
+            'id': '4',
+            'arg': '-T3',
+            'name': 'Normal',
+            'text': u'預設及不指定速度的掃描。'
+        },
+        {
+            'id': '5',
+            'arg': '-T4',
+            'name': 'Aggressive',
+            'text': u'每十毫秒鐘發送一個封包。'
+        },
+        {
+            'id': '6',
+            'arg': '-T5',
+            'name': 'Insane',
+            'text': u'每五毫秒鐘發送一個封包。'
+        }
     ]
     other_list = [
         {
