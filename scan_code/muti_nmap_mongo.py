@@ -150,19 +150,24 @@ def update_to_mongo(ip, port, data):
 
 def py_scan(target, port, Narg):
     global scanned
+    num = 0
     print 'open hosts: %s' % scanned
-    num2 = 0
     print 'scanning %s' % target
     # if host open
     try:
-        nm = nmap.PortScanner()
-        nm.scan(hosts=target, ports=port,
-                arguments=Narg, sudo=False)
+        try:
+            nm = nmap.PortScanner()
+            nm.scan(hosts=target, ports=port,
+                    arguments=Narg, sudo=False)
+        except:
+            print 'Error: Nmap is not running.'
+            sys.exit()
         print nm.command_line()
         for port in nm[target]['tcp'].keys():
             #print nm[target]['tcp'][port]
-            if nm[target]['tcp'][port]['state'] != 'closed':
+            if nm[target]['tcp'][port]['state'] == 'open':
                 data_temp = {}
+                num += 1
                 # if data not exist
                 try:
                     data_temp = post_to_mongo(
@@ -171,12 +176,15 @@ def py_scan(target, port, Narg):
                 except:
                     data_temp = update_to_mongo(
                         target, port, nm[target]['tcp'][port])
-                print data_temp
-                num2 += 1
+            print data_temp
+        if num >= 1:
+            mon.toybox.ip_list.remove({'port': 'Not thing'})
     # if host close
     except:
         data_temp2 = {
-            '_id': target + "_",
+            '_id': target + "_0",
+            'ip': target,
+            'port': 'Not thing',
             'time_pc': str(time.time()),
             'time_man': time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
         }
